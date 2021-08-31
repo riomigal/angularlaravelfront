@@ -25,10 +25,7 @@ export class RegisterComponent implements OnInit {
     terms: new FormControl('', [Validators.requiredTrue]),
   });
 
-  constructor(
-    private authService: AuthenticationService,
-    private router: Router
-  ) {}
+  constructor(private authService: AuthenticationService) {}
 
   ngOnInit(): void {}
 
@@ -43,10 +40,10 @@ export class RegisterComponent implements OnInit {
       .pipe(first())
       .subscribe(
         (res) => {
-          this.router.navigate(['/profile']);
+          // WE HAVE SEND BLABLABLABLAABL
         },
         (error) => {
-          this.errors = error.error.errors;
+          this.errors = error.errors;
         }
       );
   }

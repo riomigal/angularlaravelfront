@@ -27,6 +27,8 @@ import { JwtInterceptor } from './_auth/jwt.interceptor';
 import { InputComponent } from './layout/components/form/input/input.component';
 import { ButtonComponent } from './layout/components/form/button/button.component';
 import { CheckboxComponent } from './layout/components/form/checkbox/checkbox.component';
+import { AuthGuard } from './_auth/auth.guard';
+import { ErrorInterceptor } from './_auth/error.interceptor';
 
 @NgModule({
   declarations: [AppComponent, HeaderComponent, FooterComponent],
@@ -56,6 +58,11 @@ import { CheckboxComponent } from './layout/components/form/checkbox/checkbox.co
     {
       provide: HTTP_INTERCEPTORS,
       useClass: JwtInterceptor,
+      multi: true,
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorInterceptor,
       multi: true,
     },
   ],

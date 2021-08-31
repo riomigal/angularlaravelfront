@@ -13,7 +13,7 @@ export class AuthenticationService {
   private currentUserSubject: BehaviorSubject<User>;
   public currentUser: Observable<User>;
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(private http: HttpClient) {
     this.currentUserSubject = new BehaviorSubject<User>(
       JSON.parse(localStorage.getItem(this.locStorageKey))
     );
@@ -24,54 +24,55 @@ export class AuthenticationService {
     return this.currentUserSubject.value;
   }
 
+  getLocalStorageKey() {
+    return this.locStorageKey;
+  }
+
   register(
     name: string,
     email: string,
     password: string,
     confirm_password: string
   ) {
+    return this.http.post<any>(`${environment.apiUrl}/api/register`, {
+      email,
+      name,
+      password,
+      confirm_password,
+    });
+  }
+
+  login(email: string, password: string) {
     return this.http
-      .post<any>(`${environment.apiUrl}/api/register`, {
+      .post<User>(`${environment.apiUrl}/api/login`, {
         email,
-        name,
         password,
-        confirm_password,
       })
       .pipe(
         pluck('data'),
-        map((user: { name: string; token: string; roles: string[] }) => {
-          localStorage.removeItem(this.locStorageKey);
-          localStorage.setItem(this.locStorageKey, JSON.stringify(user));
-
-          this.currentUserSubject.next(
-            new User(user.name, user.token, user.roles)
-          );
+        map((user: User) => {
+          this.loginUser(user);
           return user;
         })
       );
   }
 
-  login(email: string, password: string) {
-    return this.http
-      .post<any>(`${environment.apiUrl}/api/login`, {
-        email,
-        password,
-      })
-      .pipe(
-        map((user: { name: string; token: string; roles: string[] }) => {
-          localStorage.removeItem(this.locStorageKey);
-          localStorage.setItem(this.locStorageKey, JSON.stringify(user));
-          this.currentUserSubject.next(
-            new User(user.name, user.token, user.roles)
-          );
-          return user;
-        })
-      );
+  resendActivationEmail(email: string, password: string) {
+    return this.http.post(`${environment.apiUrl}/api/email/resend`, {
+      email,
+      password,
+    });
   }
 
   logout() {
     this.currentUserSubject.next(null);
     localStorage.removeItem(this.locStorageKey);
     return this.http.post<any>(`${environment.apiUrl}/api/logout`, {});
+  }
+
+  loginUser(user) {
+    localStorage.removeItem(this.locStorageKey);
+    localStorage.setItem(this.locStorageKey, JSON.stringify(user));
+    this.currentUserSubject.next(user);
   }
 }

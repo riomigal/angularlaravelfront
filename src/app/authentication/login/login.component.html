@@ -35,9 +35,6 @@
                     <i class="fas fa-key fa-lg me-3 fa-fw" icon></i>
                   </app-input>
 
-                  <app-alert *ngIf="errors.error" classes="alert-danger">{{
-                    errors.error
-                  }}</app-alert>
                   <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
                     <button
                       type="submit"
@@ -48,6 +45,26 @@
                     </button>
                   </div>
                 </form>
+                <app-alert
+                  *ngIf="errors.verification"
+                  [ngClass]="acivationMailSent ? 'text-success' : 'text-danger'"
+                >
+                  <p *ngIf="!acivationMailSent">{{ errors.verification }}</p>
+
+                  <p>{{ activationMailMessage }}</p>
+
+                  <button
+                    *ngIf="!acivationMailSent"
+                    class="btn btn-primary"
+                    (click)="onResendActivationLink()"
+                  >
+                    SEND
+                  </button>
+                </app-alert>
+
+                <app-alert *ngIf="errors.authentication" class="text-danger">{{
+                  errors.authentication
+                }}</app-alert>
               </div>
               <app-image
                 class="
