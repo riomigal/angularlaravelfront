@@ -1,0 +1,17 @@
+<mdb-form-control class="my-2">
+  <input
+    [ngClass]="{ 'ng-invalid': errors }"
+    [mdbValidate]
+    mdbInput
+    [type]="type"
+    [id]="id"
+    class="form-control"
+    [formControl]="control"
+  />
+  <label *ngIf="label" mdbLabel class="form-label" for="email"
+    ><ng-content select="[icon]"></ng-content> {{ label }}</label
+  >
+  <mdb-error *ngIf="errors" class="position-static">
+    <span *ngFor="let error of errors">{{ error }}</span></mdb-error
+  >
+</mdb-form-control>

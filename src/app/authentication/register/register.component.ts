@@ -1,6 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { UserService } from '../../service/user.service';
+import {
+  Form,
+  FormControl,
+  FormGroup,
+  Validators,
+  FormControlName,
+} from '@angular/forms';
+import { AuthenticationService } from '../../_services/authentication.service';
+import { Router } from '@angular/router';
+import { first } from 'rxjs/operators';
 
 @Component({
   selector: 'app-register',
@@ -8,17 +16,38 @@ import { UserService } from '../../service/user.service';
   styleUrls: ['./register.component.scss'],
 })
 export class RegisterComponent implements OnInit {
+  errors: any = [];
   registerForm = new FormGroup({
-    name: new FormControl('name', [Validators.required]),
-    email: new FormControl('email', [Validators.required]),
-    password: new FormControl('password'),
+    name: new FormControl('', [Validators.required]),
+    email: new FormControl('', [Validators.required, Validators.email]),
+    password: new FormControl(''),
+    confirm_password: new FormControl(''),
+    terms: new FormControl('', [Validators.requiredTrue]),
   });
 
-  constructor(private userService: UserService) {}
+  constructor(
+    private authService: AuthenticationService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {}
 
   onSubmit() {
-    this.userService.register();
+    this.authService
+      .register(
+        this.registerForm.get('name').value,
+        this.registerForm.get('email').value,
+        this.registerForm.get('password').value,
+        this.registerForm.get('confirm_password').value
+      )
+      .pipe(first())
+      .subscribe(
+        (res) => {
+          this.router.navigate(['/profile']);
+        },
+        (error) => {
+          this.errors = error.error.errors;
+        }
+      );
   }
 }

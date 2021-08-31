@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, OnInit } from '@angular/core';
 import { Router, Routes } from '@angular/router';
+import { AuthenticationService } from '../../_services/authentication.service';
 
 @Component({
   selector: 'app-header',
@@ -7,7 +8,22 @@ import { Router, Routes } from '@angular/router';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
-  constructor() {}
+  constructor(
+    private authenticationService: AuthenticationService,
+    private router: Router
+  ) {}
+
+  onLogout() {
+    this.authenticationService.logout();
+    this.router.navigate(['/login']);
+  }
 
   ngOnInit(): void {}
+
+  isLoggedIn() {
+    if (this.authenticationService.currentUserValue == null) {
+      return false;
+    }
+    return true;
+  }
 }

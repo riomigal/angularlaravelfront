@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './layout/header/header.component';
@@ -23,6 +23,10 @@ import { MdbValidationModule } from 'mdb-angular-ui-kit/validation';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AuthenticationModule } from './authentication/authentication.module';
+import { JwtInterceptor } from './_auth/jwt.interceptor';
+import { InputComponent } from './layout/components/form/input/input.component';
+import { ButtonComponent } from './layout/components/form/button/button.component';
+import { CheckboxComponent } from './layout/components/form/checkbox/checkbox.component';
 
 @NgModule({
   declarations: [AppComponent, HeaderComponent, FooterComponent],
@@ -48,7 +52,13 @@ import { AuthenticationModule } from './authentication/authentication.module';
     HttpClientModule,
     AuthenticationModule,
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: JwtInterceptor,
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
