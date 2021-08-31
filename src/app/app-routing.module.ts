@@ -4,6 +4,8 @@ import { RegisterComponent } from './authentication/register/register.component'
 import { LoginComponent } from './authentication/login/login.component';
 import { UserModule } from './user/user.module';
 import { AuthGuard } from './_auth/auth.guard';
+import { ForgotPasswordComponent } from './authentication/password/forgot-password/forgot-password.component';
+import { RestorePasswordComponent } from './authentication/password/restore-password/restore-password.component';
 
 const routes: Routes = [
   {
@@ -13,6 +15,14 @@ const routes: Routes = [
   {
     path: 'login',
     component: LoginComponent,
+  },
+  {
+    path: 'forgot-password',
+    component: ForgotPasswordComponent,
+  },
+  {
+    path: 'restore-password',
+    component: RestorePasswordComponent,
   },
   {
     path: 'profile',

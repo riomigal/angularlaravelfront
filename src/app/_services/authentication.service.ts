@@ -75,4 +75,24 @@ export class AuthenticationService {
     localStorage.setItem(this.locStorageKey, JSON.stringify(user));
     this.currentUserSubject.next(user);
   }
+
+  resetPassword(email: string) {
+    return this.http.post<any>(`${environment.apiUrl}/api/password/email`, {
+      email,
+    });
+  }
+
+  setNewPassword(
+    email: string,
+    token: string,
+    password: string,
+    password_confirmation: string
+  ) {
+    return this.http.post<any>(`${environment.apiUrl}/api/password/reset`, {
+      email,
+      token,
+      password,
+      password_confirmation,
+    });
+  }
 }

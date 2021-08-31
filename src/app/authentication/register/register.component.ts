@@ -1,14 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  Form,
-  FormControl,
-  FormGroup,
-  Validators,
-  FormControlName,
-} from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthenticationService } from '../../_services/authentication.service';
-import { Router } from '@angular/router';
-import { first } from 'rxjs/operators';
+import Validation from '../../_helpers/Validation';
 
 @Component({
   selector: 'app-register',
@@ -17,13 +10,25 @@ import { first } from 'rxjs/operators';
 })
 export class RegisterComponent implements OnInit {
   errors: any = [];
-  registerForm = new FormGroup({
-    name: new FormControl('', [Validators.required]),
-    email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl(''),
-    confirm_password: new FormControl(''),
-    terms: new FormControl('', [Validators.requiredTrue]),
-  });
+  successMessage: string = '';
+  registerForm = new FormGroup(
+    {
+      name: new FormControl('', [Validators.required]),
+      email: new FormControl('', [Validators.required, Validators.email]),
+      password: new FormControl('', [
+        Validators.minLength(8),
+        Validators.maxLength(30),
+      ]),
+      confirm_password: new FormControl('', [
+        Validators.minLength(8),
+        Validators.maxLength(30),
+      ]),
+      terms: new FormControl('', [Validators.requiredTrue]),
+    },
+    {
+      validators: Validation.match('password', 'confirm_password'),
+    }
+  );
 
   constructor(private authService: AuthenticationService) {}
 
@@ -37,10 +42,9 @@ export class RegisterComponent implements OnInit {
         this.registerForm.get('password').value,
         this.registerForm.get('confirm_password').value
       )
-      .pipe(first())
       .subscribe(
         (res) => {
-          // WE HAVE SEND BLABLABLABLAABL
+          this.successMessage = res.message;
         },
         (error) => {
           this.errors = error.errors;

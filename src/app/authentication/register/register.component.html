@@ -9,13 +9,11 @@
                 <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">
                   Signup
                 </p>
-                <p>
-                  {{ registerForm.controls.email.errors | json }}
-                </p>
                 <form
                   class="mx-1 mx-md-4"
                   [formGroup]="registerForm"
                   (ngSubmit)="onSubmit()"
+                  *ngIf="!successMessage"
                 >
                   <app-input
                     [control]="registerForm.controls.name"
@@ -80,6 +78,16 @@
                     </button>
                   </div>
                 </form>
+
+                <div
+                  *ngIf="!successMessage"
+                  class="d-flex justify-content-between"
+                >
+                  <a href="login">Already an account?</a>
+                </div>
+                <app-alert *ngIf="successMessage" class="text-success"
+                  ><p>{{ successMessage }}</p></app-alert
+                >
               </div>
               <app-image
                 class="

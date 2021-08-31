@@ -25,7 +25,7 @@
     >
       <!-- Left links -->
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <ng-container *ngIf="!isLoggedIn()">
+        <ng-container *ngIf="!isLoggedIn(); else isLoggedOut">
           <li class="nav-item">
             <a
               routerLinkActive=".active"
@@ -47,16 +47,28 @@
             >
           </li>
         </ng-container>
-        <li class="nav-item">
-          <a
-            routerLink=""
-            (click)="onLogout()"
-            class="nav-link"
-            tabindex="-1"
-            aria-disabled="true"
-            >Logout</a
-          >
-        </li>
+        <ng-template #isLoggedOut>
+          <li class="nav-item">
+            <a
+              routerLink=""
+              (click)="onLogout()"
+              class="nav-link"
+              tabindex="-1"
+              aria-disabled="true"
+              >Logout</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              routerLink=""
+              routerLinkActive=".active"
+              class="nav-link"
+              tabindex="-1"
+              aria-disabled="true"
+              >Profile</a
+            >
+          </li>
+        </ng-template>
       </ul>
       <!-- Left links -->
 
