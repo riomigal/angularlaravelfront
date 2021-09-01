@@ -6,18 +6,20 @@ export default class Validation {
       const control = controls.get(controlName);
       const checkControl = controls.get(checkControlName);
 
-      if (checkControl.errors && control.errors) {
-        if (checkControl.errors && !checkControl.errors.matching) {
-          return null;
+      if (checkControl && control) {
+        if (checkControl.errors && control.errors) {
+          if (checkControl.errors && !checkControl.errors.matching) {
+            return null;
+          }
         }
-      }
 
-      if (control.value && checkControl.value) {
-        if (control.value !== checkControl.value) {
-          controls.get(checkControlName).setErrors({ matching: true });
-          return { matching: true };
-        } else {
-          return null;
+        if (control.value && checkControl.value) {
+          if (control.value !== checkControl.value) {
+            controls.get(checkControlName).setErrors({ matching: true });
+            return { matching: true };
+          } else {
+            return null;
+          }
         }
       }
     };

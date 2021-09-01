@@ -8,13 +8,16 @@ import { UserService } from '../../_services/user.service';
   styleUrls: ['./profile.component.scss'],
 })
 export class ProfileComponent implements OnInit {
-  user: User;
+  user = {} as User;
   constructor(private userService: UserService) {}
 
   ngOnInit(): void {
-    /*  this.userService.getcurrentuser().subscribe(
-      () => {},
-      (error) => console.log('what')
-    ); */
+    this.userService.getcurrentuser().subscribe(
+      (user) => {
+        this.user = user;
+        console.log(user);
+      },
+      (error) => console.error(error.errors)
+    );
   }
 }

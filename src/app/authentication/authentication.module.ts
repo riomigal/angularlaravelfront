@@ -6,6 +6,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ComponentsModule } from '../layout/components/components.module';
 import { ForgotPasswordComponent } from './password/forgot-password/forgot-password.component';
 import { RestorePasswordComponent } from './password/restore-password/restore-password.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,7 @@ import { RestorePasswordComponent } from './password/restore-password/restore-pa
     ForgotPasswordComponent,
     RestorePasswordComponent,
   ],
-  imports: [CommonModule, ReactiveFormsModule, ComponentsModule],
+  imports: [CommonModule, ReactiveFormsModule, ComponentsModule, RouterModule],
   exports: [LoginComponent, RegisterComponent],
 })
 export class AuthenticationModule {}

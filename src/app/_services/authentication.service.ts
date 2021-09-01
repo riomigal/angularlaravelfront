@@ -6,21 +6,22 @@ import { map, pluck } from 'rxjs/operators';
 import { environment } from '@environments/environment';
 import { User } from '@app/_models/user.model';
 import { Router } from '@angular/router';
+import { CurrentUser } from '../_models/current-user';
 
 @Injectable({ providedIn: 'root' })
 export class AuthenticationService {
   private locStorageKey = 'cUser';
-  private currentUserSubject: BehaviorSubject<User>;
-  public currentUser: Observable<User>;
+  private currentUserSubject: BehaviorSubject<CurrentUser>;
+  public currentUser: Observable<CurrentUser>;
 
   constructor(private http: HttpClient) {
-    this.currentUserSubject = new BehaviorSubject<User>(
+    this.currentUserSubject = new BehaviorSubject<CurrentUser>(
       JSON.parse(localStorage.getItem(this.locStorageKey))
     );
     this.currentUser = this.currentUserSubject.asObservable();
   }
 
-  public get currentUserValue(): User {
+  public get currentUserValue(): CurrentUser {
     return this.currentUserSubject.value;
   }
 
@@ -44,15 +45,20 @@ export class AuthenticationService {
 
   login(email: string, password: string) {
     return this.http
-      .post<User>(`${environment.apiUrl}/api/login`, {
+      .post<CurrentUser>(`${environment.apiUrl}/api/login`, {
         email,
         password,
       })
       .pipe(
         pluck('data'),
-        map((user: User) => {
+        map((user: CurrentUser) => {
           this.loginUser(user);
-          return user;
+          const currentUser = new CurrentUser(
+            user.name,
+            user.token,
+            user.roles
+          );
+          return currentUser;
         })
       );
   }

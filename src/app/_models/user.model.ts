@@ -1,9 +1,5 @@
 export class User {
-  constructor(
-    private _name: string,
-    private _token: string,
-    private _roles: string[]
-  ) {}
+  constructor(private _name: string, private _email: string) {}
 
   public get name(): string {
     return this._name;
@@ -12,20 +8,11 @@ export class User {
   public set name(name: string) {
     this._name = name;
   }
-
-  public get token(): string {
-    return this._token;
+  public get email(): string {
+    return this._email;
   }
 
-  public set token(password: string) {
-    this._token = password;
-  }
-
-  public get roles(): string[] {
-    return this._roles;
-  }
-
-  public set roles(roles: string[]) {
-    this._roles = roles;
+  public set email(email: string) {
+    this._email = email;
   }
 }
