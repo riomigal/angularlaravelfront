@@ -1,5 +1,7 @@
 Update the Backend API URL in both environment files before use. Testing and Prod.
 
+src/environments/*
+
 # ShapenatorFront
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.2.0.
